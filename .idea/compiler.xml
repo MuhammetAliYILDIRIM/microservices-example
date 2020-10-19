@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="account-service" />
         <module name="config-server" />
+        <module name="service-discovery" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="account-service" target="11" />
       <module name="config-server" target="11" />
       <module name="microservices-may-project" target="11" />
+      <module name="service-discovery" target="11" />
       <module name="service-parent" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -21,6 +23,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="account-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="service-discovery" options="-parameters" />
       <module name="service-parent" options="-parameters" />
     </option>
   </component>
