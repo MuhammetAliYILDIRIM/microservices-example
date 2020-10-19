@@ -124,36 +124,9 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-### Intellij Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
-
-# *.iml
-# modules.xml
-# .idea/misc.xml
-# *.ipr
-
 ### Activiti ###
 *.bpmn2d
-
 */test-output
-
-### Gradle ###
-.gradle
-.nb-gradle/
-**/build/
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-
 out/
 component-test/cve-suppression.xml
 nvd/jsrepository.json
