@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -38,6 +38,9 @@ public class User {
     private Date lastModifiedDate;
 
     @Column(nullable = false)
-    private boolean isDeleted ;
+    private boolean isDeleted;
+
+    @Column(nullable = false)
+    private boolean isActive;
 
 }

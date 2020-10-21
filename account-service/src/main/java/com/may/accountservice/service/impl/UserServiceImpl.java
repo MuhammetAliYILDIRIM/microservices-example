@@ -9,7 +9,9 @@ import com.may.accountservice.repository.entity.User;
 import com.may.accountservice.service.UserService;
 import com.may.accountservice.util.HashingUtil;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +23,10 @@ import static com.may.accountservice.exception.ErrorType.USER_NOT_FOUND;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper mapper;
 
     @Override
+    @Transactional
     public void createUser(UserDto userDto) {
 
         if (userRepository.findUserByEmail(userDto.getEmail()).isPresent())
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(HashingUtil.encode(userDto.getPassword()));
         newUser.setDeleted(false);
+        newUser.setActive(false);
 
         userRepository.save(newUser);
     }
@@ -45,24 +50,16 @@ public class UserServiceImpl implements UserService {
     public UserListDto getUserByUserName(String username) {
 
         User user = userRepository.findUserByUsername(username)
-                            .orElseThrow(() -> new AccountServiceException(USER_NOT_FOUND));
+                .orElseThrow(() -> new AccountServiceException(USER_NOT_FOUND));
 
-        return UserListDto.builder()
-                .username(user.getUsername())
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .build();
+        return mapper.map(user, UserListDto.class);
 
     }
 
     @Override
     public List<UserListDto> getAllUsers() {
 
-        return userRepository.findAll().stream().map(user -> UserListDto.builder()
-                .email(user.getEmail())
-                .fullName(user.getFullName())
-                .username(user.getUsername())
-                .build())
+        return userRepository.findAll().stream().map(user -> mapper.map(user, UserListDto.class))
                 .collect(Collectors.toList());
 
     }

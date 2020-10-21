@@ -1,16 +1,15 @@
 server:
-  port: 8501
+  port: 8502
 
 spring:
   application:
-    name: account-service
+    name: ticket-service
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/accountservicedb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/ticketservicedb?createDatabaseIfNotExist=true
     username: root
     password: password
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
     show-sql: true
-
