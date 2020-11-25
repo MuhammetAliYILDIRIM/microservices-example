@@ -1,24 +1,20 @@
-package com.may.ticketservice.config;
+package com.may.accountservice.config;
+
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static java.util.function.Predicate.not;
 
 @Configuration
-@EnableJpaAuditing
-@EnableElasticsearchRepositories
-@ComponentScan("com.may")
-public class BaseConfiguration {
-
+@EnableSwagger2
+public class BaseConfigurations {
     private static final String EXCLUDED_PATHS = "(/actuator|/actuator/.*|/info|/health|/health/" +
             ".*|/metrics|/error|/env|/env/.*)";
     @Bean
@@ -32,7 +28,7 @@ public class BaseConfiguration {
 
 
     @Bean
-    public ModelMapper modelMapper() {
+    public ModelMapper getModelMapper() {
         return new ModelMapper();
     }
 }
