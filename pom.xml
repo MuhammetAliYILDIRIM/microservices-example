@@ -35,6 +35,7 @@
         <module>account-service</module>
         <module>service-discovery</module>
         <module>ticket-service</module>
+        <module>service-common</module>
     </modules>
 
 

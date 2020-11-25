@@ -8,6 +8,14 @@ services:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
     ports:
-        - '3306:3306'
+      - '3306:3306'
     expose:
-        - '3306'
+      - '3306'
+
+  elasticsearch:
+    image: elasticsearch:7.9.0
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      discovery.type: single-node

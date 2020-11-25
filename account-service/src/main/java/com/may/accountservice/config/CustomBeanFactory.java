@@ -9,7 +9,7 @@ public class CustomBeanFactory {
 
 
     @Bean
-    public ModelMapper getModelMapper(){
+    public ModelMapper getModelMapper() {
         return new ModelMapper();
     }
 }

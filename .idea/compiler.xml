@@ -10,6 +10,7 @@
         <module name="config-server" />
         <module name="account-service" />
         <module name="service-discovery" />
+        <module name="service-common" />
         <module name="ticket-service" />
       </profile>
     </annotationProcessing>
@@ -17,8 +18,10 @@
       <module name="account-service" target="11" />
       <module name="config-server" target="11" />
       <module name="microservices-may-project" target="11" />
+      <module name="service-common" target="11" />
       <module name="service-discovery" target="11" />
       <module name="service-parent" target="11" />
+      <module name="services-communication" target="11" />
       <module name="ticket-service" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -26,8 +29,10 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="account-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="service-common" options="-parameters" />
       <module name="service-discovery" options="-parameters" />
       <module name="service-parent" options="-parameters" />
+      <module name="services-communication" options="-parameters" />
       <module name="ticket-service" options="-parameters" />
     </option>
   </component>
