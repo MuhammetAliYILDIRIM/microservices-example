@@ -15,6 +15,6 @@ If this is your first time using Github, review https://help.github.com to learn
 ----------------------------
 From the command line with docker-compose:
 
-$ cd MAYLibrary-Spring-MVC
-$ cd docker-compose -f docker-compose.yml up -d
+    $ cd microservices-example
+    $ docker-compose -f docker-compose.yml up -d
 
