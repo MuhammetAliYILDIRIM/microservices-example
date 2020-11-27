@@ -1,6 +1,6 @@
 # Microservice Example
 ---------------------------	
-This project is an Microservices Architecture. I used Spring Boot, Spring Cloud, Eureka server, Mysql, Elastic search and Feign client in this project.  
+This project is an example of Microservices Architecture. I used Spring Boot, Spring Cloud, Eureka server, Spring Cloud Config Server, Mysql database, Elastic search and Feign client in this project.  
 
 ## To get the code:
 ---------------------------	
