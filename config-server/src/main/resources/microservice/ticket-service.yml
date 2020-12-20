@@ -12,4 +12,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+kafka:
+  enabled: true
+  ticket-event-producer.clientId: ticketClient
+  ticket-event-producer.groupId: ticketGroup
+  ticket-event-producer.topic: ticketTopic
 
+  mechanism: PLAIN
+  request.timeout.ms: 20000
+  bootstrap:
+    servers: http://localhost:9092
+  api:
+    key:
+    secret:
+  schema.registry.url: http://localhost:8081

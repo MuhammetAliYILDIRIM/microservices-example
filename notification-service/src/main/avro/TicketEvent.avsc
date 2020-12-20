@@ -1,0 +1,10 @@
+{"namespace": "com.may.ticketservice",
+ "type": "record",
+ "name": "TicketEvent",
+ "fields": [
+     {"name": "id", "type": "string"},
+     {"name": "description", "type": "string"},
+     {"name": "note", "type": "string"}
+
+ ]
+}

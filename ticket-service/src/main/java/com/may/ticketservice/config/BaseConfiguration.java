@@ -21,6 +21,7 @@ public class BaseConfiguration {
 
     private static final String EXCLUDED_PATHS = "(/actuator|/actuator/.*|/info|/health|/health/" +
             ".*|/metrics|/error|/env|/env/.*)";
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

@@ -1,8 +1,8 @@
 package com.may.accountservice.service.impl;
 
 
-import com.may.accountservice.dto.request.AccountDto;
-import com.may.accountservice.dto.response.AccountListDto;
+import com.may.accountservice.dto.request.AccountRequest;
+import com.may.accountservice.dto.response.AccountListResponse;
 import com.may.accountservice.exception.AccountServiceException;
 import com.may.accountservice.exception.ErrorType;
 import com.may.accountservice.repository.AccountRepository;
@@ -28,39 +28,39 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void createAccount(AccountDto accountDto) {
+    public void createAccount(AccountRequest accountRequest) {
 
-        if (accountRepository.findUserByEmail(accountDto.getEmail()).isPresent())
+        if (accountRepository.findUserByEmail(accountRequest.getEmail()).isPresent())
             throw new AccountServiceException(ErrorType.EMAIL_IN_USE);
 
-        if (accountRepository.findUserByUsername(accountDto.getUsername()).isPresent())
+        if (accountRepository.findUserByUsername(accountRequest.getUsername()).isPresent())
             throw new AccountServiceException(ErrorType.USERNAME_IN_USE);
 
         Account newAccount = new Account();
-        newAccount.setEmail(accountDto.getEmail());
-        newAccount.setFistName(accountDto.getFirstName());
-        newAccount.setLastName(accountDto.getLastName());
-        newAccount.setUsername(accountDto.getUsername());
-        newAccount.setPassword(HashingUtil.encode(accountDto.getPassword()));
-        newAccount.setPhoneNumber(accountDto.getPhoneNumber());
+        newAccount.setEmail(accountRequest.getEmail());
+        newAccount.setFistName(accountRequest.getFirstName());
+        newAccount.setLastName(accountRequest.getLastName());
+        newAccount.setUsername(accountRequest.getUsername());
+        newAccount.setPassword(HashingUtil.encode(accountRequest.getPassword()));
+        newAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         Address address = new Address();
-        address.setAddressLineOne(accountDto.getAddressLineOne());
-        address.setAddressLineTwo(accountDto.getAddressLineTwo());
-        address.setCountry(accountDto.getCountry());
-        address.setCity(accountDto.getCity());
-        address.setTown(accountDto.getTown());
-        address.setPostCode(accountDto.getPostCode());
+        address.setAddressLineOne(accountRequest.getAddressLineOne());
+        address.setAddressLineTwo(accountRequest.getAddressLineTwo());
+        address.setCountry(accountRequest.getCountry());
+        address.setCity(accountRequest.getCity());
+        address.setTown(accountRequest.getTown());
+        address.setPostCode(accountRequest.getPostCode());
         newAccount.setAddress(address);
         accountRepository.save(newAccount);
     }
 
     @Override
-    public AccountListDto getAccountByUserName(String username) {
+    public AccountListResponse getAccountByUserName(String username) {
 
         Account account = accountRepository.findUserByUsername(username)
                 .orElseThrow(() -> new AccountServiceException(USER_NOT_FOUND));
 
-        return AccountListDto.builder()
+        return AccountListResponse.builder()
                 .email(account.getEmail())
                 .fullName(account.getFistName() + " " + account.getLastName())
                 .username(account.getUsername())
@@ -69,10 +69,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountListDto> getAllAccounts() {
+    public List<AccountListResponse> getAllAccounts() {
 
         return accountRepository.findAll().stream()
-                .map(account -> AccountListDto.builder()
+                .map(account -> AccountListResponse.builder()
                         .email(account.getEmail())
                         .fullName(account.getFistName() + " " + account.getLastName())
                         .username(account.getUsername())

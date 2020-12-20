@@ -1,6 +1,7 @@
 package com.may.ticketservice.controller;
 
-import com.may.ticketservice.dto.TicketDto;
+import com.may.ticketservice.dto.TicketRequest;
+import com.may.ticketservice.dto.TicketResponse;
 import com.may.ticketservice.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,25 +22,25 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<String> createTicket(@RequestBody TicketDto ticketDto) {
-        ticketService.save(ticketDto);
-        return new ResponseEntity<String>("The ticket has been created successfully", HttpStatus.CREATED);
+    public ResponseEntity<String> createTicket(@RequestBody TicketRequest ticketRequest) {
+        ticketService.save(ticketRequest);
+        return new ResponseEntity<>("The ticket has been created successfully", HttpStatus.CREATED);
     }
 
     @PutMapping(TICKET_ID)
-    public ResponseEntity<TicketDto> updateTicket(@PathVariable(value = TICKET_ID) String ticketId,
-                                                  @RequestBody TicketDto ticketDto) {
-        return ResponseEntity.ok(ticketService.update(ticketId, ticketDto));
+    public ResponseEntity<TicketResponse> updateTicket(@PathVariable(value = TICKET_ID) String ticketId,
+                                                       @RequestBody TicketRequest ticketRequest) {
+        return ResponseEntity.ok(ticketService.update(ticketId, ticketRequest));
     }
 
     @GetMapping
-    public ResponseEntity<Page<TicketDto>> getAllTickets(Pageable pageable) {
+    public ResponseEntity<Page<TicketResponse>> getAllTickets(Pageable pageable) {
 
         return ResponseEntity.ok(ticketService.getPagination(pageable));
     }
 
     @GetMapping(TICKET_ID)
-    public ResponseEntity<TicketDto> getTicketById(@PathVariable(value = TICKET_ID) String ticketId) {
+    public ResponseEntity<TicketResponse> getTicketById(@PathVariable(value = TICKET_ID) String ticketId) {
 
         return ResponseEntity.ok(ticketService.getById(ticketId));
     }

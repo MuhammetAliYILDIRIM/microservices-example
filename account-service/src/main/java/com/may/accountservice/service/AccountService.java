@@ -1,19 +1,19 @@
 package com.may.accountservice.service;
 
 
-import com.may.accountservice.dto.request.AccountDto;
-import com.may.accountservice.dto.response.AccountListDto;
+import com.may.accountservice.dto.request.AccountRequest;
+import com.may.accountservice.dto.response.AccountListResponse;
 import com.may.client.contract.AccountEventDto;
 
 import java.util.List;
 
 public interface AccountService {
 
-    void createAccount(AccountDto accountDto);
+    void createAccount(AccountRequest accountRequest);
 
-    AccountListDto getAccountByUserName(String username);
+    AccountListResponse getAccountByUserName(String username);
 
-    List<AccountListDto> getAllAccounts();
+    List<AccountListResponse> getAllAccounts();
 
     AccountEventDto getAccountByUserID(String id);
 }
