@@ -1,0 +1,21 @@
+server:
+  port: 8503
+
+spring:
+  application:
+    name: notification-service
+
+kafka:
+  enabled: true
+  ticket-event-consumer.clientId: ticketClient
+  ticket-event-consumer.groupId: ticketGroup
+  ticket-event-consumer.topic: ticketTopic
+
+  mechanism: PLAIN
+  request.timeout.ms: 20000
+  bootstrap:
+    servers: http://localhost:9092
+  api:
+    key:
+    secret:
+  schema.registry.url: http://localhost:8081

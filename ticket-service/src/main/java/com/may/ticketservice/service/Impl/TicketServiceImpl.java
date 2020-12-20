@@ -2,7 +2,9 @@ package com.may.ticketservice.service.Impl;
 
 import com.may.client.AccountServiceClient;
 import com.may.client.contract.AccountEventDto;
-import com.may.ticketservice.dto.TicketDto;
+import com.may.ticketservice.TicketEvent;
+import com.may.ticketservice.dto.TicketRequest;
+import com.may.ticketservice.dto.TicketResponse;
 import com.may.ticketservice.enums.PriorityType;
 import com.may.ticketservice.enums.TicketStatus;
 import com.may.ticketservice.exception.TicketServiceException;
@@ -11,6 +13,7 @@ import com.may.ticketservice.repository.entity.Ticket;
 import com.may.ticketservice.repository.entity.elasticsearch.TicketElasticRepository;
 import com.may.ticketservice.repository.entity.elasticsearch.TicketModel;
 import com.may.ticketservice.service.TicketService;
+import com.may.ticketservice.service.producer.TicketEventProducer;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -33,12 +36,13 @@ public class TicketServiceImpl implements TicketService {
     private final TicketElasticRepository ticketElasticRepository;
     private final AccountServiceClient accountServiceClient;
     private final ModelMapper modelMapper;
+    private final TicketEventProducer ticketEventProducer;
 
     @Override
     @Transactional
-    public TicketDto save(TicketDto ticketDto) {
+    public TicketResponse save(TicketRequest ticketRequest) {
         Ticket ticket = new Ticket();
-        ResponseEntity<AccountEventDto> account = accountServiceClient.getUserByUserId(ticketDto.getAssignee());
+        ResponseEntity<AccountEventDto> account = accountServiceClient.getUserByUserId(ticketRequest.getAssignee());
         if (account.getBody() == null) {
             throw new TicketServiceException(ASSIGNEE_NOT_FOUND);
         }
@@ -47,14 +51,14 @@ public class TicketServiceImpl implements TicketService {
             throw new TicketServiceException(INTERNAL_ERROR);
         }
 
-        if (ticketDto.getDescription() == null) {
+        if (ticketRequest.getDescription() == null) {
             throw new TicketServiceException(DESCRIPTION_CAN_NOT_BE_EMPTY);
         }
-        ticket.setDescription(ticketDto.getDescription());
-        ticket.setNotes(ticketDto.getNotes());
-        ticket.setTicketDate(ticketDto.getTicketDate());
-        ticket.setTicketStatus(TicketStatus.valueOf(ticketDto.getTicketStatus()));
-        ticket.setPriorityType(PriorityType.valueOf(ticketDto.getPriorityType()));
+        ticket.setDescription(ticketRequest.getDescription());
+        ticket.setNotes(ticketRequest.getNotes());
+        ticket.setTicketDate(ticketRequest.getTicketDate());
+        ticket.setTicketStatus(TicketStatus.valueOf(ticketRequest.getTicketStatus()));
+        ticket.setPriorityType(PriorityType.valueOf(ticketRequest.getPriorityType()));
         ticket.setAssignee(account.getBody().getFullName());
         ticket = ticketRepository.save(ticket);
 
@@ -70,17 +74,23 @@ public class TicketServiceImpl implements TicketService {
 
         ticketElasticRepository.save(model);
 
-        ticketDto.setId(ticket.getId());
-        return ticketDto;
+        ticketEventProducer.publish(TicketEvent.newBuilder()
+                .setId(ticket.getId())
+                .setDescription(ticket.getDescription())
+                .setNote(ticket.getNotes())
+                .build());
+
+
+        return modelMapper.map(ticket, TicketResponse.class);
     }
 
     @Override
     @Transactional
-    public TicketDto update(String ticketId, TicketDto ticketDto) {
+    public TicketResponse update(String ticketId, TicketRequest ticketRequest) {
         Ticket ticket =
                 ticketRepository.findById(ticketId).orElseThrow(() -> new TicketServiceException(TICKET_NOT_FOUND));
 
-        ResponseEntity<AccountEventDto> account = accountServiceClient.getUserByUserId(ticketDto.getAssignee());
+        ResponseEntity<AccountEventDto> account = accountServiceClient.getUserByUserId(ticketRequest.getAssignee());
         if (account.getBody() == null) {
             throw new TicketServiceException(ASSIGNEE_NOT_FOUND);
         }
@@ -88,11 +98,11 @@ public class TicketServiceImpl implements TicketService {
         if (account.getStatusCode() != HttpStatus.OK) {
             throw new TicketServiceException(INTERNAL_ERROR);
         }
-        ticket.setTicketStatus(TicketStatus.valueOf(ticketDto.getTicketStatus()));
-        ticket.setPriorityType(PriorityType.valueOf(ticketDto.getPriorityType()));
-        ticket.setDescription(ticketDto.getDescription());
-        ticket.setNotes(ticketDto.getNotes());
-        ticket.setTicketDate(ticketDto.getTicketDate());
+        ticket.setTicketStatus(TicketStatus.valueOf(ticketRequest.getTicketStatus()));
+        ticket.setPriorityType(PriorityType.valueOf(ticketRequest.getPriorityType()));
+        ticket.setDescription(ticketRequest.getDescription());
+        ticket.setNotes(ticketRequest.getNotes());
+        ticket.setTicketDate(ticketRequest.getTicketDate());
         ticket.setAssignee(account.getBody().getFullName());
 
         ticket = ticketRepository.save(ticket);
@@ -108,22 +118,22 @@ public class TicketServiceImpl implements TicketService {
                 .build();
 
         ticketElasticRepository.save(model);
-        return ticketDto;
+        return modelMapper.map(ticket, TicketResponse.class);
     }
 
     @Override
-    public TicketDto getById(String ticketId) {
+    public TicketResponse getById(String ticketId) {
         Ticket ticket =
                 ticketRepository.findById(ticketId).orElseThrow(() -> new TicketServiceException(TICKET_NOT_FOUND));
 
 
-        return modelMapper.map(ticket, TicketDto.class);
+        return modelMapper.map(ticket, TicketResponse.class);
     }
 
     @Override
-    public Page<TicketDto> getPagination(Pageable pageable) {
+    public Page<TicketResponse> getPagination(Pageable pageable) {
 
         return new PageImpl<>(ticketRepository.findAll(pageable).stream().map(ticket -> modelMapper.map(ticket,
-                TicketDto.class)).collect(Collectors.toList()));
+                TicketResponse.class)).collect(Collectors.toList()));
     }
 }

@@ -1,16 +1,17 @@
 package com.may.ticketservice.service;
 
-import com.may.ticketservice.dto.TicketDto;
+import com.may.ticketservice.dto.TicketRequest;
+import com.may.ticketservice.dto.TicketResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TicketService {
 
-    TicketDto save(TicketDto ticketDto);
+    TicketResponse save(TicketRequest ticketRequest);
 
-    TicketDto update(String ticketId, TicketDto ticketDto);
+    TicketResponse update(String ticketId, TicketRequest ticketRequest);
 
-    TicketDto getById(String ticketId);
+    TicketResponse getById(String ticketId);
 
-    Page<TicketDto> getPagination(Pageable pageable);
+    Page<TicketResponse> getPagination(Pageable pageable);
 }
