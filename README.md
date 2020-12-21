@@ -1,9 +1,10 @@
 # Microservice Example
----------------------------	
-This project is an example of Microservices Architecture. I used Spring Boot, Spring Cloud, Eureka server, Spring Cloud Config Server, Mysql database, Elastic search and Feign client in this project.  
+------------------------------------
+This project is an example of Microservices Architecture. I used Spring Boot, Spring Cloud, Eureka server, Spring 
+Cloud Config Server, Mysql database, Apache Kafka&Avro, Swagger, Elastic search and Feign Client in this project.  
 
 ## To get the code:
----------------------------	
+------------------------------------
 Clone the repository:
 
     $ git clone git://github.com/MuhammetAliYILDIRIM/microservices-example.git
@@ -11,8 +12,8 @@ Clone the repository:
 
 If this is your first time using Github, review https://help.github.com to learn the basics.
 
-## To get environment requirements
-----------------------------
+## To get environment requirements:
+------------------------------------
 From the command line with docker-compose:
 
     $ cd microservices-example
